@@ -1,0 +1,27 @@
+scale:
+  n_personas: 5
+  n_charts: 20
+  assignments_per_chart: 5
+
+models:
+  persona_gen: "gpt-4o-mini"
+  preference_gen: "gpt-4.1-mini"   # vision
+  rubric_gen: "gpt-4o-mini"
+  tested_frontier: "gpt-4.1-mini"  # vision
+  tested_open: "Qwen/Qwen3-VL-8B-Instruct"  # Colab
+  judge: "gpt-4.1-mini"            # vision
+  embeddings: "text-embedding-3-small"
+
+inference:
+  temperature_generation: 0.9
+  temperature_preferences: 0.7
+  temperature_responses: 0.7
+  temperature_judge: 0.1
+  max_tokens: 1024
+
+paths:
+  data_dir: "data"
+  results_dir: "results"
+  cache_dir: ".cache"
+
+seed: 42

@@ -1,0 +1,15 @@
+.env
+.cache/
+logs/
+data/charts/
+data/*.json
+data/preferences/
+data/rubrics/
+data/responses/
+data/judgments/
+results/
+__pycache__/
+*.pyc
+.venv/
+dist/
+*.egg-info/

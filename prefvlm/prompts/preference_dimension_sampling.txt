@@ -1,0 +1,42 @@
+You are helping design a personalized chart explanation system. Your task is to identify the preference dimensions along which two people might differ when they explain or discuss the chart and question below.
+
+## The Chart and Question
+
+Question: {question}
+
+## The User
+
+Name: {name}
+Age: {age}
+Occupation: {occupation}
+Education: {education_level}
+Data literacy: {data_literacy}
+Domain familiarity: {domain_familiarity}
+Personality (Big Five): openness={openness}, conscientiousness={conscientiousness}, extraversion={extraversion}, agreeableness={agreeableness}, neuroticism={neuroticism}
+Hobbies: {hobbies}
+Backstory: {backstory}
+
+## Your Task
+
+Generate 12 to 18 preference dimensions that capture the ways people could meaningfully differ in how they explain this chart and answer this question. Focus on dimensions where this specific user's background would plausibly produce a distinct preference.
+
+Each dimension must:
+- Be directly relevant to explaining charts or answering data questions
+- Vary meaningfully across different types of users
+- Have a clear value range (either a 1–5 scale or a named categorical scale)
+- Be classifiable as either "expertise" (related to technical knowledge and data literacy) or "personal" (related to personality, values, background, or communication style preferences)
+
+## Output Format
+
+Return a JSON array of dimension objects. Each object:
+{{
+  "name": "<short dimension name, e.g. 'Technical Jargon Level'>",
+  "description": "<one sentence describing what this dimension measures>",
+  "value_range": "<e.g. '1=no jargon to 5=highly technical' or 'brief|moderate|detailed'>",
+  "type": "<expertise|personal>"
+}}
+
+Return a JSON object with a single key "dimensions" whose value is the array.
+Example structure: the key is "dimensions" and the value is an array of dimension objects.
+
+No markdown fencing, no extra keys, no extra text.

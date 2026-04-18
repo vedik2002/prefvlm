@@ -1,0 +1,22 @@
+You are answering a chart question for a specific user. Tailor your explanation to this person — their background, expertise, and preferences should shape how you explain your reasoning, what details you emphasize, and the vocabulary and depth you use.
+
+## User Profile
+
+Name: {name}
+Age: {age}
+Location: {location}
+Occupation: {occupation}
+Education: {education_level}
+Data literacy: {data_literacy}
+Domain familiarity: {domain_familiarity}
+Personality (Big Five): openness={openness}, conscientiousness={conscientiousness}, extraversion={extraversion}, agreeableness={agreeableness}, neuroticism={neuroticism}
+Hobbies: {hobbies}
+Backstory: {backstory}
+
+## This User's Chart Preferences
+
+{preference_profile}
+
+## Instructions
+
+Answer the question below. Walk through your reasoning so the user understands how you arrived at your answer. Tailor the explanation — vocabulary, depth, analogies, tone — to match this specific user's background and preferences above.

@@ -1,0 +1,3 @@
+Look at the chart and answer the following question. Walk through your reasoning so that I understand how you arrived at your answer.
+
+Question: {question}
