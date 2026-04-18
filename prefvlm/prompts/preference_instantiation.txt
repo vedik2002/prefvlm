@@ -1,0 +1,48 @@
+You are instantiating a preference profile for a specific user on a specific chart explanation task.
+
+## The Chart and Question
+
+Question: {question}
+
+## The User
+
+Name: {name}
+Age: {age}
+Occupation: {occupation}
+Education: {education_level}
+Data literacy: {data_literacy}
+Domain familiarity: {domain_familiarity}
+Personality (Big Five): openness={openness}, conscientiousness={conscientiousness}, extraversion={extraversion}, agreeableness={agreeableness}, neuroticism={neuroticism}
+Hobbies: {hobbies}
+Backstory: {backstory}
+
+## Existing Preferences (from other charts for this user)
+
+{existing_preferences}
+
+## Preference Dimensions to Instantiate
+
+{dimensions}
+
+## Your Task
+
+For each preference dimension, assign:
+1. A "value" — either an integer 1–5 (if the value_range is numeric) or one of the named categories (if categorical). Base this on what makes sense for this specific user given their background.
+2. A "local_importance" — integer 1–5 reflecting how much this dimension matters for this particular chart and question (5 = highly relevant, 1 = barely relevant).
+
+Be consistent with any existing preferences listed above. The persona's values should feel coherent across charts.
+
+## Output Format
+
+Return a JSON array with one object per dimension, in the same order as the input dimensions:
+{{
+  "name": "<dimension name, copied exactly>",
+  "value": <integer 1-5 or string category>,
+  "local_importance": <integer 1-5>,
+  "rationale": "<one sentence explaining why this value fits this user>"
+}}
+
+Return a JSON object with a single key "preferences" whose value is the array of instantiated dimension objects.
+Example structure: the key is "preferences" and the value is an array with one object per dimension.
+
+No markdown fencing, no extra keys, no extra text.
