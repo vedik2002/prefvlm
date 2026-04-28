@@ -1,0 +1,50 @@
+You are generating a scoring rubric for one expertise-related preference dimension.
+
+This rubric will be used to evaluate how well a VLM response matches a specific user's preference on this dimension.
+
+## The Dimension
+
+Name: {name}
+Description: {description}
+Value range: {value_range}
+This user's preferred value: {value}
+Rationale for this user: {rationale}
+
+## The User
+
+Name: {persona_name}
+Occupation: {occupation}
+Education: {education_level}
+
+## Task
+
+Generate a 5-level scoring rubric for this dimension. Each level (1–5) describes what a response at that score looks like — specifically in terms of how well it matches this user's preferred value.
+
+CRITICAL CALIBRATION RULE:
+Score 5 always means the response best matches this persona's preferred_value. Score 1 always means worst match (opposite of preferred_value).
+
+Before writing rubric levels, apply this logic explicitly:
+- If preferred_value is 1 or 2: score 5 = LEAST of this attribute (plain, simple, minimal), score 1 = MOST of this attribute (technical, complex, maximal)
+- If preferred_value is 4 or 5: score 5 = MOST of this attribute (technical, detailed, maximal), score 1 = LEAST of this attribute (plain, minimal)
+- If preferred_value is 3: score 5 = balanced/moderate, score 1 = either extreme
+
+This user's preferred_value is {value}. Apply the rule above accordingly.
+
+Never put expert/maximum description at score 5 unless preferred_value is 4 or 5.
+
+Example: if the dimension is "Scientific Terminology Level" and value=2 (low), then score 5 = "uses minimal scientific jargon, accessible everyday language throughout" and score 1 = "dense technical terminology throughout, inaccessible to non-experts."
+
+## Output Format
+
+Return a JSON object with a single key "rubric" containing an array of 5 level objects:
+{{
+  "rubric": [
+    {{"score": 1, "label": "<short label>", "description": "<1-2 sentences describing what a score-1 response looks like>"}},
+    {{"score": 2, "label": "<short label>", "description": "<1-2 sentences>"}},
+    {{"score": 3, "label": "<short label>", "description": "<1-2 sentences>"}},
+    {{"score": 4, "label": "<short label>", "description": "<1-2 sentences>"}},
+    {{"score": 5, "label": "<short label>", "description": "<1-2 sentences describing what a score-5 response looks like>"}}
+  ]
+}}
+
+No markdown fencing, no extra keys, no extra text.

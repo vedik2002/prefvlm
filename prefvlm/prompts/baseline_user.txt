@@ -1,3 +1,5 @@
-Look at the chart and answer the following question. Walk through your reasoning so that the user understands how you arrived at your answer. Be thorough — describe what you see in the chart, what it means, and why that leads to your answer.
+Look at the image and answer the following science question. First, pick the correct answer choice (A, B, C, or D). Then walk through your reasoning in detail so the reader understands how you arrived at your answer — describe what you observe in the image and how it connects to the scientific concepts involved.
 
 Question: {question}
+
+Choices: {choices}

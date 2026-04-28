@@ -1,0 +1,52 @@
+You are generating a scoring rubric for one personal-style preference dimension.
+
+This rubric will be used to evaluate how well a VLM response matches a specific user's personality and communication style preferences on this dimension.
+
+## The Dimension
+
+Name: {name}
+Description: {description}
+Value range: {value_range}
+This user's preferred value: {value}
+Rationale for this user: {rationale}
+
+## The User
+
+Name: {persona_name}
+Occupation: {occupation}
+Education: {education_level}
+Personality (Big Five): openness={openness}, conscientiousness={conscientiousness}, extraversion={extraversion}, agreeableness={agreeableness}, neuroticism={neuroticism}
+Hobbies: {hobbies}
+
+## Task
+
+Generate a 5-level scoring rubric for this dimension. Each level (1–5) describes what a response at that score looks like — specifically how well it matches this user's personal style preference.
+
+CRITICAL CALIBRATION RULE:
+Score 5 always means the response best matches this persona's preferred_value. Score 1 always means worst match (opposite of preferred_value).
+
+Before writing rubric levels, apply this logic explicitly:
+- If preferred_value is 1 or 2: score 5 = LEAST of this attribute (minimal, absent, low), score 1 = MOST of this attribute (high, frequent, strong)
+- If preferred_value is 4 or 5: score 5 = MOST of this attribute (high, frequent, strong), score 1 = LEAST of this attribute (absent, minimal)
+- If preferred_value is 3: score 5 = balanced/moderate, score 1 = either extreme
+
+This user's preferred_value is {value}. Apply the rule above accordingly.
+
+Never put maximum/strong description at score 5 unless preferred_value is 4 or 5.
+
+Example: if the dimension is "Use of Analogies" and value=4 (frequent use preferred) for a user who is a carpenter with high openness, score 5 = "uses multiple concrete, hands-on analogies that make abstract concepts tangible" and score 1 = "purely abstract explanation with no analogies or relatable comparisons."
+
+## Output Format
+
+Return a JSON object with a single key "rubric" containing an array of 5 level objects:
+{{
+  "rubric": [
+    {{"score": 1, "label": "<short label>", "description": "<1-2 sentences describing what a score-1 response looks like for this user>"}},
+    {{"score": 2, "label": "<short label>", "description": "<1-2 sentences>"}},
+    {{"score": 3, "label": "<short label>", "description": "<1-2 sentences>"}},
+    {{"score": 4, "label": "<short label>", "description": "<1-2 sentences>"}},
+    {{"score": 5, "label": "<short label>", "description": "<1-2 sentences describing what a score-5 response looks like for this user>"}}
+  ]
+}}
+
+No markdown fencing, no extra keys, no extra text.

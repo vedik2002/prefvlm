@@ -1,8 +1,10 @@
-You are helping design a personalized chart explanation system. Your task is to identify the preference dimensions along which two people might differ when they explain or discuss the chart and question below.
+You are helping design a personalized science explanation system. Your task is to identify the preference dimensions along which two people might differ when explaining the answer to the science question below.
 
-## The Chart and Question
+## The Science Question
 
+Topic: {topic} (grade {grade})
 Question: {question}
+Choices: {choices}
 
 ## The User
 
@@ -10,7 +12,6 @@ Name: {name}
 Age: {age}
 Occupation: {occupation}
 Education: {education_level}
-Data literacy: {data_literacy}
 Domain familiarity: {domain_familiarity}
 Personality (Big Five): openness={openness}, conscientiousness={conscientiousness}, extraversion={extraversion}, agreeableness={agreeableness}, neuroticism={neuroticism}
 Hobbies: {hobbies}
@@ -18,25 +19,35 @@ Backstory: {backstory}
 
 ## Your Task
 
-Generate 12 to 18 preference dimensions that capture the ways people could meaningfully differ in how they explain this chart and answer this question. Focus on dimensions where this specific user's background would plausibly produce a distinct preference.
+Generate 12 to 18 preference dimensions that capture the ways people could meaningfully differ in how they explain this science question and image. Focus on dimensions where this specific user's background would plausibly produce a distinct preference.
+
+Use education level as the starting anchor for all expertise dimensions:
+- High school / vocational → expertise values 1–2
+- Some college → 2–3
+- Bachelor's → 3
+- Master's → 3–4
+- Doctoral → 4–5
 
 Each dimension must:
-- Be directly relevant to explaining charts or answering data questions
+- Be directly relevant to explaining science questions or images
 - Vary meaningfully across different types of users
-- Have a clear value range (either a 1–5 scale or a named categorical scale)
-- Be classifiable as either "expertise" (related to technical knowledge and data literacy) or "personal" (related to personality, values, background, or communication style preferences)
+- Have a clear value range (either a 1–5 numeric scale or a named categorical scale)
+- Be classifiable as "expertise" (related to scientific knowledge and reasoning depth) or "personal" (related to personality, values, or communication style)
+
+After generating all dimensions, check for duplicates. Two dimensions are duplicates if changing one in a response necessarily changes the other — meaning they move together by definition. If yes, keep the more specific and actionable one, remove the other.
+
+Then check for differentiation: would this dimension produce meaningfully different values for a PhD scientist vs a high school dropout? If not, remove it.
+
+After both checks enforce a maximum of 15 dimensions.
 
 ## Output Format
 
-Return a JSON array of dimension objects. Each object:
+Return a JSON object with key "dimensions" containing an array of dimension objects. Each object:
 {{
-  "name": "<short dimension name, e.g. 'Technical Jargon Level'>",
+  "name": "<short dimension name, e.g. 'Scientific Terminology Level'>",
   "description": "<one sentence describing what this dimension measures>",
-  "value_range": "<e.g. '1=no jargon to 5=highly technical' or 'brief|moderate|detailed'>",
+  "value_range": "<e.g. '1=plain language to 5=expert terminology' or 'brief|moderate|detailed'>",
   "type": "<expertise|personal>"
 }}
-
-Return a JSON object with a single key "dimensions" whose value is the array.
-Example structure: the key is "dimensions" and the value is an array of dimension objects.
 
 No markdown fencing, no extra keys, no extra text.

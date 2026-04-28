@@ -5,8 +5,8 @@ Usage:
 
 Stages:
     personas       Generate 5 personas
-    charts         Load 20 charts from ChartQA
-    scenarios      Assign personas to charts
+    questions      Load 30 questions from ScienceQA
+    scenarios      Assign personas to questions
     preferences    Instantiate preference profiles
     rubrics        Generate scoring rubrics
     frontier       Run GPT-4.1-mini inference (3 conditions)
@@ -18,7 +18,6 @@ Stages:
     validate       Test OpenAI connectivity
 """
 
-import sys
 from pathlib import Path
 
 import click
@@ -30,7 +29,7 @@ from prefvlm.logging_setup import setup_logging
 STAGES = [
     "validate",
     "personas",
-    "charts",
+    "questions",
     "scenarios",
     "preferences",
     "rubrics",
@@ -45,7 +44,7 @@ STAGES = [
 LOCAL_STAGES = [
     "validate",
     "personas",
-    "charts",
+    "questions",
     "scenarios",
     "preferences",
     "rubrics",
@@ -77,15 +76,15 @@ def run_personas() -> None:
     personas = generate_personas()
     click.echo(f"\n✓ Generated {len(personas)} personas. Saved to data/personas.json")
     for p in personas:
-        click.echo(f"  • {p.name} ({p.age}, {p.occupation}) — data_literacy={p.data_literacy}")
+        click.echo(f"  • {p.name} ({p.age}, {p.occupation})")
 
 
-def run_charts() -> None:
-    from prefvlm.data.chartqa import load_charts
-    charts = load_charts()
-    click.echo(f"\n✓ Loaded {len(charts)} charts. Saved to data/charts.json")
-    for c in charts[:5]:
-        click.echo(f"  • [{c['chart_id']}] {c['question'][:60]}...")
+def run_questions() -> None:
+    from prefvlm.data.scienceqa import load_questions
+    questions = load_questions()
+    click.echo(f"\n✓ Loaded {len(questions)} questions. Saved to data/questions.json")
+    for q in questions[:5]:
+        click.echo(f"  • [{q['question_id']}] grade={q['grade']} {q['topic']:12s} | {q['question'][:55]}...")
 
 
 def run_scenarios() -> None:
@@ -112,9 +111,9 @@ def run_frontier(limit: int = 0) -> None:
     click.echo("\n✓ Frontier inference complete.")
 
 
-def run_qwen_prepare() -> None:
+def run_qwen_prepare(limit: int = 0) -> None:
     from prefvlm.runners.qwen_batch import prepare_batch
-    prepare_batch()
+    prepare_batch(limit=limit)
 
 
 def run_qwen_ingest() -> None:
@@ -155,12 +154,12 @@ def cli(stage: str, limit: int) -> None:
     dispatch = {
         "validate": lambda: run_validate(),
         "personas": lambda: run_personas(),
-        "charts": lambda: run_charts(),
+        "questions": lambda: run_questions(),
         "scenarios": lambda: run_scenarios(),
         "preferences": lambda: run_preferences(limit),
         "rubrics": lambda: run_rubrics(limit),
         "frontier": lambda: run_frontier(limit),
-        "qwen-prepare": lambda: run_qwen_prepare(),
+        "qwen-prepare": lambda: run_qwen_prepare(limit),
         "qwen-ingest": lambda: run_qwen_ingest(),
         "judge": lambda: run_judge(limit),
         "aggregate": lambda: run_aggregate(),

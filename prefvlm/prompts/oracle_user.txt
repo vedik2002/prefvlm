@@ -1,3 +1,5 @@
-Look at the chart and answer the following question. Walk through your reasoning so that I understand how you arrived at your answer.
+Look at the image and answer the following science question. First state the correct answer choice (A, B, C, or D). Then walk through your reasoning so I understand how you arrived at your answer.
 
 Question: {question}
+
+Choices: {choices}

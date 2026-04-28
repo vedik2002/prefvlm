@@ -5,9 +5,39 @@ from pathlib import Path
 from typing import Any
 
 import yaml
-from dotenv import load_dotenv
 
-load_dotenv()
+import re as _re
+
+def _load_dotenv_robust(path: str = ".env") -> None:
+    """Load .env tolerating spaces around = and quoted values."""
+    try:
+        from pathlib import Path as _P
+        env_path = _P(path)
+        if not env_path.exists():
+            env_path = _P(__file__).parent.parent / path
+        if not env_path.exists():
+            return
+        for raw in env_path.read_text().splitlines():
+            line = raw.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, _, rest = line.partition("=")
+            key = key.strip()
+            val = rest.strip()
+            # If value is quoted, extract content between first open quote and next close quote
+            if val and val[0] in ('"', "'"):
+                q = val[0]
+                close_idx = val.find(q, 1)   # next matching quote after position 0
+                if close_idx != -1:
+                    val = val[1:close_idx]
+                else:
+                    val = val[1:]            # no closing quote found — strip leading only
+            if key and key not in os.environ:
+                os.environ[key] = val
+    except Exception:
+        pass  # fallback silently
+
+_load_dotenv_robust()   # handles KEY = "value" format with spaces around =
 
 _ROOT = Path(__file__).parent.parent
 _CONFIG_PATH = _ROOT / "config.yaml"
@@ -23,8 +53,10 @@ _cfg = _load_yaml()
 
 class _Scale:
     n_personas: int = _cfg["scale"]["n_personas"]
-    n_charts: int = _cfg["scale"]["n_charts"]
+    n_charts: int = _cfg["scale"]["n_charts"]       # kept for config compat
+    n_questions: int = _cfg["scale"]["n_charts"]    # alias used by ScienceQA loader
     assignments_per_chart: int = _cfg["scale"]["assignments_per_chart"]
+    assignments_per_question: int = _cfg["scale"]["assignments_per_chart"]  # alias
 
 
 class _Models:
@@ -50,7 +82,8 @@ class _Paths:
     results_dir: Path = _ROOT / _cfg["paths"]["results_dir"]
     cache_dir: Path = _ROOT / _cfg["paths"]["cache_dir"]
     prompts_dir: Path = _ROOT / "prefvlm" / "prompts"
-    charts_dir: Path = _ROOT / _cfg["paths"]["data_dir"] / "charts"
+    images_dir: Path = _ROOT / _cfg["paths"]["data_dir"] / "images"   # ScienceQA images
+    charts_dir: Path = _ROOT / _cfg["paths"]["data_dir"] / "images"   # backward-compat alias
     preferences_dir: Path = _ROOT / _cfg["paths"]["data_dir"] / "preferences"
     rubrics_dir: Path = _ROOT / _cfg["paths"]["data_dir"] / "rubrics"
     responses_dir: Path = _ROOT / _cfg["paths"]["data_dir"] / "responses"

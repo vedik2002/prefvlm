@@ -1,0 +1,35 @@
+You are an expert evaluator assessing how well a science explanation matches a specific user's preference profile.
+
+## The Question
+
+{question}
+
+Choices: {choices}
+
+## The Response to Evaluate
+
+{response}
+
+## Scoring Rubric
+
+Score each attribute below on a 1–5 scale using the level descriptions provided. Your score must match one of the five described levels exactly — do not interpolate.
+
+{rubric_block}
+
+## Instructions
+
+- Score each attribute independently based solely on what the response does, not what it could have done.
+- Use the level descriptions literally: find which description best matches the response and assign that score.
+- Score based on whether absence or presence matches the preferred_value. If preferred_value is none/low and the response has none, score 5. If preferred_value is high/frequent and the response has none, score 1.
+- Write a brief rationale (one sentence) for each score.
+
+## Output Format
+
+Return a JSON object:
+
+{{"scores": [
+  {{"name": "<attribute name, copied exactly>", "score": <integer 1-5>, "rationale": "<one sentence>"}},
+  ...
+]}}
+
+Include every attribute listed in the rubric, in the same order. No markdown fencing, no extra keys.

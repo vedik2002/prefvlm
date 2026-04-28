@@ -1,8 +1,10 @@
-You are instantiating a preference profile for a specific user on a specific chart explanation task.
+You are instantiating a preference profile for a specific user on a specific science explanation task.
 
-## The Chart and Question
+## The Science Question
 
+Topic: {topic} (grade {grade})
 Question: {question}
+Choices: {choices}
 
 ## The User
 
@@ -10,13 +12,12 @@ Name: {name}
 Age: {age}
 Occupation: {occupation}
 Education: {education_level}
-Data literacy: {data_literacy}
 Domain familiarity: {domain_familiarity}
 Personality (Big Five): openness={openness}, conscientiousness={conscientiousness}, extraversion={extraversion}, agreeableness={agreeableness}, neuroticism={neuroticism}
 Hobbies: {hobbies}
 Backstory: {backstory}
 
-## Existing Preferences (from other charts for this user)
+## Existing Preferences (from other questions for this user)
 
 {existing_preferences}
 
@@ -27,22 +28,68 @@ Backstory: {backstory}
 ## Your Task
 
 For each preference dimension, assign:
-1. A "value" — either an integer 1–5 (if the value_range is numeric) or one of the named categories (if categorical). Base this on what makes sense for this specific user given their background.
-2. A "local_importance" — integer 1–5 reflecting how much this dimension matters for this particular chart and question (5 = highly relevant, 1 = barely relevant).
+1. A "value" — integer 1–5 if the value_range is numeric, or one of the named categories if categorical. Base this on what makes sense for this specific user given their background.
+2. A "local_importance" — integer 1–5 reflecting how much this dimension matters for this particular question and image (5 = highly relevant, 1 = barely relevant).
 
-Be consistent with any existing preferences listed above. The persona's values should feel coherent across charts.
+Be consistent with any existing preferences listed above. The persona's values should feel coherent across questions.
+
+## BIG FIVE → ATTRIBUTES (mandatory)
+
+For each Big Five trait that is notably high or low, generate exactly one attribute using the name and value_range specified below. Never use "true" or "false" as a value — always pick from the named scale.
+
+| Trait condition | Attribute name | value_range | High-end value | Low-end value |
+|---|---|---|---|---|
+| High OR low neuroticism | Reassuring Framing | none\|some\|strong | strong | none |
+| High OR low conscientiousness | Explanation Structure | implicit\|partial\|explicit | explicit | implicit |
+| High OR low extraversion | Conversational Warmth | formal\|neutral\|warm | warm | formal |
+| High OR low agreeableness | Encouragement Tone | direct\|balanced\|elaborate | elaborate | direct |
+| High OR low openness | Creative Framing | conventional\|some\|frequent | frequent | conventional |
+
+This persona's Big Five: {big_five}
+
+For each trait that is notably high or low, add the corresponding attribute with the appropriate value from its scale (pick the end closest to the trait level — e.g. high neuroticism → "strong", low neuroticism → "none"). Set local_importance to 4.
+
+## OCCUPATION x QUESTION CONNECTION (mandatory attempt)
+
+Persona occupation: {occupation}
+Persona hobbies: {hobbies}
+Question topic: {topic}
+
+Is there a concrete, specific connection between this person's daily work or hobbies and the science concept in this question?
+If YES: generate one high-importance attribute naming the specific analogy. Be concrete — not "use cooking metaphors" but "explain thermal energy using searing and boiling since Carlos works with heat daily."
+If NO genuine connection exists: skip it. Do not force weak analogies.
+
+## DEDUPLICATION CHECK
+
+After assembling all attributes, scan every pair. Ask: do these two measure the same underlying axis of an explanation, just phrased differently?
+
+Examples of duplicates:
+- "Vocabulary Familiarity" and "Scientific Terminology Level" → same axis (lexical complexity), keep the more specific one
+- "Encouragement Tone" and "Empathy and Encouragement" → same axis (supportiveness), keep the more specific one
+- "Explanation Depth" and "Explanation Detail" → same axis, keep one
+
+If two attributes are duplicates, remove the less specific or less actionable one. Keep the one whose name most clearly tells a model what to do differently.
+
+## DIFFERENTIATION CHECK
+
+For each remaining attribute, ask: would a PhD scientist and a high school dropout receive meaningfully different values on this dimension?
+
+- If YES (e.g., "Scientific Terminology Level" — PhD gets 5, dropout gets 1): keep it.
+- If NO for most realistic persona pairs (e.g., "Factual Accuracy" — everyone wants 5): remove it.
+
+Attributes that fail this test add noise and dilute the signal from attributes that pass. Remove them.
+
+## FINAL COUNT
+
+After both checks: if the count still exceeds 15, remove the lowest local_importance attributes until you reach 15. You must output between 12 and 15 attributes total. Count before writing the JSON.
 
 ## Output Format
 
-Return a JSON array with one object per dimension, in the same order as the input dimensions:
-{{
-  "name": "<dimension name, copied exactly>",
-  "value": <integer 1-5 or string category>,
-  "local_importance": <integer 1-5>,
-  "rationale": "<one sentence explaining why this value fits this user>"
-}}
+Return a JSON object with key "preferences" containing an array with one object per dimension, in the same order as the input dimensions plus any new attributes generated from the Big Five and occupation mappings above:
 
-Return a JSON object with a single key "preferences" whose value is the array of instantiated dimension objects.
-Example structure: the key is "preferences" and the value is an array with one object per dimension.
+{{"preferences": [
+  {{"name": "<dimension name>", "value": <integer 1-5 or string>, "local_importance": <integer 1-5>, "rationale": "<one sentence explaining why this value fits this user>"}},
+  ...
+]}}
 
 No markdown fencing, no extra keys, no extra text.

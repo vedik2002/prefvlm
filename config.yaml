@@ -1,7 +1,7 @@
 scale:
-  n_personas: 5
-  n_charts: 20
-  assignments_per_chart: 5
+  n_personas: 50
+  n_charts: 10        # also used as n_questions for ScienceQA
+  assignments_per_chart: 50  # fully crossed: every persona × every question
 
 models:
   persona_gen: "gpt-4o-mini"

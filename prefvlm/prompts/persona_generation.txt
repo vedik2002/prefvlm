@@ -1,75 +1,57 @@
-You are generating a realistic research participant persona for a study on how people interpret data visualizations.
+Generate a realistic persona as JSON.
 
-Generate a single persona as a JSON object. The persona must feel like a real, specific person — not a generic archetype.
+## Slot requirements
 
-## Requirements for this persona
-
-Data literacy level: {data_literacy}
 Age range: {age_range}
-Occupation type: {occupation_type}
-Location constraint: {location_constraint}
-Name constraint: {name_constraint}
+Occupation type: {occupation_hint}
+Location: {location_constraint}
+Name: {name_constraint}
+Big Five personality (USE EXACTLY THESE VALUES — do not change them):
+  {big_five_constraints}
 
-## JSON schema
+Forbidden domain keywords (do NOT use any of these words in domain_familiarity):
+  {forbidden_domain_keywords}
+
+## BACKSTORY RULES
+
+2-3 sentences. Should read like a paragraph from a novel — specific, vivid, grounded in daily life.
+
+GOOD: "Kyle lives with his two dogs in a rented duplex near the stockyards. Most mornings start at 5:30 on a job site; most evenings end on the back porch with a beer and whatever his neighbor is grilling."
+
+BAD: "Kyle prefers hands-on explanations and finds charts overwhelming, so he values straightforward communication."
+
+BANNED words in backstory: "clear", "simple", "straightforward", "detailed", "jargon", "technical", "visual", "hands-on", "practical approach", "analytical", "data", "charts", "science", "learns", "understands", "struggles with", "comfortable with", "prefers", "explains", "education"
+
+Backstory must NOT mention: science, math, data, learning, education, how they prefer information.
+Backstory MUST describe: who they are, daily life, relationships, what they care about.
+
+## DOMAIN FAMILIARITY RULES
+
+Use occupational and hobby domains — NOT academic subjects.
+GOOD: ["commercial fishing", "engine repair", "local politics"]
+BAD: ["biology", "data analysis", "scientific reasoning"]
+
+Do NOT use any of the forbidden domain keywords listed above.
+
+## Output schema
+
+Return ONLY this JSON object — no markdown, no extra keys, no extra text:
 
 {{
   "persona_id": "{persona_id}",
   "name": "<first and last name>",
   "age": <integer in range {age_range}>,
   "location": "<City, State or City, Country>",
-  "occupation": "<specific job title>",
-  "education_level": "<one of: high school diploma, some college, bachelor's degree, master's degree, doctoral degree, vocational training>",
-  "data_literacy": "{data_literacy}",
-  "domain_familiarity": ["<2-4 domain areas this person knows through work experience, e.g. 'HVAC systems', 'residential construction', 'local labor regulations'>"],
+  "occupation": "<specific job title matching the occupation type above>",
+  "education_level": "<high school diploma|some college|bachelor's degree|master's degree|doctoral degree|vocational training>",
+  "domain_familiarity": ["<2-4 occupational or hobby domains, no forbidden keywords>"],
   "big_five": {{
-    "openness": "<low|moderate|high>",
-    "conscientiousness": "<low|moderate|high>",
-    "extraversion": "<low|moderate|high>",
-    "agreeableness": "<low|moderate|high>",
-    "neuroticism": "<low|moderate|high>"
+    "openness": "<must match the required value above>",
+    "conscientiousness": "<must match the required value above>",
+    "extraversion": "<must match the required value above>",
+    "agreeableness": "<must match the required value above>",
+    "neuroticism": "<must match the required value above>"
   }},
-  "hobbies": ["<2-4 specific hobbies — just name them, no data/analytics framing>"],
-  "backstory": "<2-3 sentences. See rules below.>"
+  "hobbies": ["<2-4 specific hobbies — plain names only, no data/science framing>"],
+  "backstory": "<2-3 sentences, novel-style, zero data/science/learning framing>"
 }}
-
-## Data literacy definitions
-
-- low: The person's job has little or no professional contact with data analytics, reports, or charts. Examples of qualifying occupations: retail associate, warehouse worker, home health aide, long-haul trucker, restaurant cook, early childhood caregiver, postal worker, landscaper, construction laborer, retiree whose career predated heavy data use.
-- moderate: The person's job involves occasional contact with data (reading a report, tracking student grades, looking at sales figures) but data analysis is not their primary function. Examples: classroom teacher, nurse, small business owner, sales associate, middle manager, journalist.
-- high: Data analysis is a primary function of the job. Examples: data scientist, financial analyst, software engineer, product manager, researcher, operations analyst, epidemiologist.
-
-## STRICT BACKSTORY RULES
-
-The backstory is 2-3 sentences describing the person's life history, work, and what they care about.
-
-### ALLOWED
-- What their job involves day-to-day (factual description of tasks)
-- Their personal history: where they grew up, how they got into their field
-- Family, community, values, relationships
-- What they care about in life
-
-### FORBIDDEN — these will cause the persona to be rejected
-
-**Do not describe how they relate to data, charts, metrics, or analytics in any sentence — including sentences about their personal life, hobbies, or reflections.**
-
-Specifically forbidden:
-- Any sentence mentioning: data, metrics, statistics, numbers, charts, graphs, reports, measurements, quantitative, analytical, trends, performance, outcomes, tracking, analysis, patterns
-- Any sentence about "how they use data at work" (the data_literacy field captures this — do not repeat it in prose)
-- Any hobby or personal activity described with data/analytics framing — do NOT write "she tracks plant growth", "he reflects on how systems rely on data", "she merges her creative vision with analytics", "he uses metrics from fishing"
-- Any sentence about what kind of information they prefer, find helpful, struggle with, or enjoy reading
-
-**Hobbies and personal life must be described purely as activities and interests — no data framing whatsoever.**
-
-Examples of FORBIDDEN backstory sentences:
-- "She often incorporates environmental data into her lessons." ← FORBIDDEN
-- "He reflects on how systems rely on intricate data to thrive." ← FORBIDDEN
-- "She merges her artistic vision with the data she gathers about plant growth." ← FORBIDDEN
-- "He rarely works with numbers and finds charts overwhelming." ← FORBIDDEN
-- "She values clear explanations when reading reports." ← FORBIDDEN
-
-Examples of ALLOWED backstory sentences:
-- "He grew up in rural Tennessee and learned plumbing from his uncle before getting licensed at 22."
-- "She has worked the same postal route in Queens for fifteen years and is known by most of her customers by name."
-- "Outside of work she coaches her daughter's soccer team on weekends and tends a large vegetable garden."
-
-Return ONLY the JSON object, no markdown fencing, no extra text.

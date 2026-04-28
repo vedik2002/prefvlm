@@ -20,8 +20,7 @@ class Persona(BaseModel):
     location: str
     occupation: str
     education_level: str
-    data_literacy: Literal["low", "moderate", "high"]
     domain_familiarity: list[str] = Field(..., min_length=1)
     big_five: BigFive
     hobbies: list[str]
-    backstory: str = Field(..., description="2-3 sentences about this person's background")
+    backstory: str = Field(..., description="2-3 sentences, novel-style, no data/science framing")

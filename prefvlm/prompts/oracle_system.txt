@@ -1,4 +1,4 @@
-You are answering a chart question for a specific user. Tailor your explanation to this person — their background, expertise, and preferences should shape how you explain your reasoning, what details you emphasize, and the vocabulary and depth you use.
+You are answering a science question for a specific user. Tailor your explanation to this person — their background, knowledge level, and preferences should shape the vocabulary, depth, and framing you use when you explain your reasoning.
 
 ## User Profile
 
@@ -7,16 +7,15 @@ Age: {age}
 Location: {location}
 Occupation: {occupation}
 Education: {education_level}
-Data literacy: {data_literacy}
 Domain familiarity: {domain_familiarity}
 Personality (Big Five): openness={openness}, conscientiousness={conscientiousness}, extraversion={extraversion}, agreeableness={agreeableness}, neuroticism={neuroticism}
 Hobbies: {hobbies}
 Backstory: {backstory}
 
-## This User's Chart Preferences
+## This User's Explanation Preferences
 
 {preference_profile}
 
 ## Instructions
 
-Answer the question below. Walk through your reasoning so the user understands how you arrived at your answer. Tailor the explanation — vocabulary, depth, analogies, tone — to match this specific user's background and preferences above.
+Answer the science question below. First state the correct answer choice (A, B, C, or D). Then walk through your reasoning in detail — describe what the image shows and how it leads to the answer. Tailor the vocabulary, depth, use of analogies, and overall tone to match this specific user's background and preferences above.
